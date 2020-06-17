@@ -4,7 +4,6 @@ go 1.13
 
 require (
 	github.com/ebar-go/ego v0.9.13
-	github.com/ebar-go/loadbalance v0.1.1
 	github.com/gin-gonic/gin v1.6.3
 	github.com/pkg/errors v0.9.1
 )

@@ -13,7 +13,10 @@ const(
 	InvalidResponse = 1002
 	DataNotFound = 1003
 	SendRequestFailed = 1004
+	DataSaveFailed = 1005
+	DataQueryFailed = 1006
+	DataDeleteFailed = 1007
 
+	UpstreamWasOffline = 2001
 
-	NodeWasOffline = 2001
 )

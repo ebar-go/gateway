@@ -10,7 +10,6 @@ package balance
 
 import (
 	"github.com/ebar-go/ego/utils/array"
-	"github.com/ebar-go/loadbalance/utils"
 )
 
 const(
@@ -39,7 +38,7 @@ func (loader *WeightBalance) Reload(weights []int) {
 
 	if loader.count > 1 {
 		// 计算最大公约数
-		loader.gcd = utils.NGcd(weights, loader.count)
+		loader.gcd = NGcd(weights, loader.count)
 	} else {
 		loader.gcd = 1
 	}
@@ -73,4 +72,27 @@ func (loader *WeightBalance) RandomIndex() int {
 			return loader.lastNodeIndex
 		}
 	}
+}
+
+
+func Gcd(a, b int) int {
+	if a < b {
+		a, b = b, a
+	}
+
+	if b == 0 {
+		return a
+	}else {
+		return Gcd(b, a%b)
+	}
+
+
+}
+
+func NGcd(numbers []int, n int) int {
+	if n == 1 {
+		return numbers[n-1]
+	}
+
+	return Gcd(numbers[n-1], NGcd(numbers, n-1))
 }

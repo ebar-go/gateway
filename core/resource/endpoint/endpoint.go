@@ -26,14 +26,17 @@ func New(Address string, weight int) Endpoint  {
 	return Endpoint{id: strings.UUID(), address:Address, weight: weight}
 }
 
+// GetCompleteUrl
 func (e Endpoint) GetCompleteUrl(path string) string {
 	return fmt.Sprintf("http://%s%s", e.address, path)
 }
 
+// Id
 func (e Endpoint) Id() string {
 	return e.id
 }
 
+// Weight 权重
 func (e Endpoint) Weight() int {
 	return e.weight
 }

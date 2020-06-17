@@ -6,7 +6,7 @@ import (
 	"github.com/pkg/errors"
 )
 
-// node 路由节点
+// upstream 路由节点
 type node struct {
 	// 保存这个节点上的URL路径
 	// 例如上图中的search和support, 共同的parent节点的path="s"
@@ -72,7 +72,7 @@ func (n *node) addRoute(path string, handle Handle) error {
 	if len(n.path) > 0 || len(n.children) > 0 {
 	walk:
 		for {
-			// Update maxParams of the current node
+			// Update maxParams of the current upstream
 			// 更新当前node的最大参数个数
 			if numParams > n.maxParams {
 				n.maxParams = numParams
@@ -121,7 +121,7 @@ func (n *node) addRoute(path string, handle Handle) error {
 				n.wildChild = false
 			}
 
-			// Make new node a child of this node
+			// Make new upstream a child of this upstream
 			// 同时, 将新来的这个节点插入新的parent节点中当做孩子节点
 			if i < len(path) {
 				// i的后半部分作为路径, 即上面例子support中的upport
@@ -132,7 +132,7 @@ func (n *node) addRoute(path string, handle Handle) error {
 					n = n.children[0]
 					n.priority++
 
-					// Update maxParams of the child node
+					// Update maxParams of the child upstream
 					if numParams > n.maxParams {
 						n.maxParams = numParams
 					}
@@ -192,7 +192,7 @@ func (n *node) addRoute(path string, handle Handle) error {
 
 				// 说明是相同的路径,仅仅需要将handle替换就OK
 				// 如果是nil那么说明取消这个handle, 不是空不允许
-			} else if i == len(path) { // Make node a (in-path) leaf
+			} else if i == len(path) { // Make upstream a (in-path) leaf
 				if n.handle != nil && handle != nil {
 					return errors.New("a handle is already registered for path '" + fullPath + "'")
 				}
@@ -218,7 +218,7 @@ func (n *node) incrementChildPrio(pos int) int {
 	// adjust position (move to front)
 	newPos := pos
 	for newPos > 0 && n.children[newPos-1].priority < prio {
-		// swap node positions
+		// swap upstream positions
 		n.children[newPos-1], n.children[newPos] = n.children[newPos], n.children[newPos-1]
 
 		newPos--
@@ -326,7 +326,7 @@ func (n *node) insertChild(numParams uint8, path, fullPath string, handle Handle
 
 			n.path = path[offset:i]
 
-			// first node: catchAll node with empty path
+			// first upstream: catchAll upstream with empty path
 			child := &node{
 				wildChild: true,
 				nType:     catchAll,
@@ -337,7 +337,7 @@ func (n *node) insertChild(numParams uint8, path, fullPath string, handle Handle
 			n = child
 			n.priority++
 
-			// second node: node holding the variable
+			// second upstream: upstream holding the variable
 			child = &node{
 				path:      path[i:],
 				nType:     catchAll,
@@ -369,8 +369,8 @@ walk: // outer loop for walking the tree
 			// 前面一段必须和当前节点的path一样才OK
 			if path[:len(n.path)] == n.path {
 				path = path[len(n.path):]
-				// If this node does not have a wildcard (param or catchAll)
-				// child,  we can just look up the next child node and continue
+				// If this upstream does not have a wildcard (param or catchAll)
+				// child,  we can just look up the next child upstream and continue
 				// to walk down the tree
 				// 如果不是参数节点, 那么根据分支walk到下一个节点就OK
 				if !n.wildChild {
@@ -447,13 +447,13 @@ walk: // outer loop for walking the tree
 					return
 
 				default:
-					panic("invalid node type")
+					panic("invalid upstream type")
 				}
 			}
 			// 走到路径end
 		} else if path == n.path {
-			// We should have reached the node containing the handle.
-			// Check if this node has a handle registered.
+			// We should have reached the upstream containing the handle.
+			// Check if this upstream has a handle registered.
 			// 判断这个路径节点是都存在handle, 如果存在, 那么就可以直接返回了.
 			if handle = n.handle; handle != nil {
 				return

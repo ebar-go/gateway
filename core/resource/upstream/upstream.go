@@ -1,4 +1,4 @@
-package node
+package upstream
 
 import (
 	"fmt"
@@ -13,20 +13,21 @@ import (
 )
 
 
-// Node define properties of node
-type Node struct {
+// Upstream define properties of upstream
+type Upstream struct {
 	// unique id
 	ID string
 
 	// service name
 	Router string
 
-	// node status(0:offline,1:online)
+	// upstream status(0:offline,1:online)
 	Status int
 
 	// api
 	ApiGroup *api.Group
-	
+
+	// 节点
 	endpoints []endpoint.Endpoint
 
 	// 权重负载均衡
@@ -35,12 +36,12 @@ type Node struct {
 
 
 // String
-func (n *Node) String() string {
+func (n *Upstream) String() string {
 	return fmt.Sprintf("ID:%s, Router:%s, Status:%d, PodNumber:%d, ApiNumber:%d",
 		n.ID, n.Router, n.Status, n.GetEndpointCount(),  n.ApiGroup.Count())
 }
 
-func (n *Node) getWeights() []int {
+func (n *Upstream) getWeights() []int {
 	var result []int
 	for _, e := range n.endpoints {
 		result = append(result, e.Weight())
@@ -49,23 +50,23 @@ func (n *Node) getWeights() []int {
 	return result
 }
 
-func (n *Node) GetEndpointCount() int {
+func (n *Upstream) GetEndpointCount() int {
 	return len(n.endpoints)
 }
 
-func (n *Node) reloadWeight() {
+func (n *Upstream) reloadWeight() {
 	if n.wb == nil {
 		n.wb = new(balance.WeightBalance)
 	}
 	n.wb.Reload(n.getWeights())
 }
 
-func (n *Node) AddEndpoint(endpoint endpoint.Endpoint) {
+func (n *Upstream) AddEndpoint(endpoint endpoint.Endpoint) {
 	n.endpoints = append(n.endpoints, endpoint)
 	n.reloadWeight()
 }
 
-func (n *Node) DeleteEndpoint(id string) {
+func (n *Upstream) DeleteEndpoint(id string) {
 	for index, item := range n.endpoints {
 		if item.Id() == id {
 			n.endpoints = append(n.endpoints[:index], n.endpoints[index+1:]...)
@@ -75,7 +76,7 @@ func (n *Node) DeleteEndpoint(id string) {
 }
 
 
-func (n *Node) getBackupIndex(lastIndex int) int {
+func (n *Upstream) getBackupIndex(lastIndex int) int {
 	lastEndpoint := n.endpoints[lastIndex]
 	n.DeleteEndpoint(lastEndpoint.Id())
 	n.wb.Reload(n.getWeights())
@@ -85,7 +86,7 @@ func (n *Node) getBackupIndex(lastIndex int) int {
 }
 
 
-func (n *Node) SendRequest(method, path string, req *http.Request) (string, error) {
+func (n *Upstream) SendRequest(method, path string, req *http.Request) (string, error) {
 	index := n.wb.RandomIndex()
 	if index == balance.InvalidIndex {
 		return "", fmt.Errorf("endpoint not found")
@@ -112,7 +113,7 @@ func (n *Node) SendRequest(method, path string, req *http.Request) (string, erro
 }
 
 // SendRequest 执行请求
-func (n *Node) sendRequest(c endpoint.Endpoint, method, path string, req *http.Request) (string, error) {
+func (n *Upstream) sendRequest(c endpoint.Endpoint, method, path string, req *http.Request) (string, error) {
 	// 构造http请求
 	var request *http.Request
 	var requestErr error

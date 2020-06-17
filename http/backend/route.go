@@ -19,4 +19,9 @@ func LoadRoute(router *gin.Engine) {
 
 	base.POST("user/login", handler.UserLoginHandler)
 	base.POST("user/register", handler.UserRegisterHandler)
+
+	base.GET("upstream", handler.ListUpstreamHandler)
+	base.POST("upstream", handler.CreateUpstreamHandler)
+	base.PUT("upstream", nil)
+	base.DELETE("upstream", handler.DeleteUpstreamHandler)
 }

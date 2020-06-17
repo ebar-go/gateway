@@ -11,7 +11,7 @@ package dispatcher
 import (
 	"github.com/ebar-go/ego/errors"
 	"github.com/ebar-go/gateway/core/enum"
-	"github.com/ebar-go/gateway/core/resource/node"
+	"github.com/ebar-go/gateway/core/resource/upstream"
 	"net/http"
 )
 
@@ -20,14 +20,14 @@ type Dispatcher interface {
 }
 
 type HttpDispatcher struct {
-	ng *node.Group
+	ng *upstream.Group
 }
 
 func NewHttpDispatcher() *HttpDispatcher {
-	return &HttpDispatcher{ng: node.NewGroup()}
+	return &HttpDispatcher{ng: upstream.NewGroup()}
 }
 
-func (dispatcher *HttpDispatcher) NodeGroup() *node.Group {
+func (dispatcher *HttpDispatcher) UpstreamGroup() *upstream.Group {
 	return dispatcher.ng
 }
 
@@ -35,11 +35,11 @@ func (dispatcher *HttpDispatcher) NodeGroup() *node.Group {
 func (dispatcher *HttpDispatcher) Dispatch(router, path string, request *http.Request) (string, error) {
 	n := dispatcher.ng.FindByRouter(router)
 	if n == nil {
-		return "", errors.New(enum.DataNotFound, "node not found")
+		return "", errors.New(enum.DataNotFound, "upstream not found")
 	}
 
-	if n.Status == node.Offline {
-		return "", errors.New(enum.NodeWasOffline, "node is offline")
+	if n.Status == upstream.Offline {
+		return "", errors.New(enum.UpstreamWasOffline, "upstream is offline")
 	}
 
 	api := n.ApiGroup.Get(request.Method, path)
