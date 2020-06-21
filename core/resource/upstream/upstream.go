@@ -12,7 +12,6 @@ import (
 	"strings"
 )
 
-
 // Upstream define properties of upstream
 type Upstream struct {
 	// unique id
@@ -34,11 +33,10 @@ type Upstream struct {
 	wb *balance.WeightBalance
 }
 
-
 // String
 func (n *Upstream) String() string {
 	return fmt.Sprintf("ID:%s, Router:%s, Status:%d, PodNumber:%d, ApiNumber:%d",
-		n.ID, n.Router, n.Status, n.GetEndpointCount(),  n.ApiGroup.Count())
+		n.ID, n.Router, n.Status, n.GetEndpointCount(), n.ApiGroup.Count())
 }
 
 func (n *Upstream) getWeights() []int {
@@ -75,7 +73,6 @@ func (n *Upstream) DeleteEndpoint(id string) {
 	n.reloadWeight()
 }
 
-
 func (n *Upstream) getBackupIndex(lastIndex int) int {
 	lastEndpoint := n.endpoints[lastIndex]
 	n.DeleteEndpoint(lastEndpoint.Id())
@@ -84,7 +81,6 @@ func (n *Upstream) getBackupIndex(lastIndex int) int {
 	n.AddEndpoint(lastEndpoint)
 	return backupIndex
 }
-
 
 func (n *Upstream) SendRequest(method, path string, req *http.Request) (string, error) {
 	index := n.wb.RandomIndex()
@@ -151,5 +147,3 @@ func (n *Upstream) sendRequest(c endpoint.Endpoint, method, path string, req *ht
 
 	return ego.Curl(request)
 }
-
-

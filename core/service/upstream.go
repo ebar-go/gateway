@@ -21,18 +21,24 @@ import (
 )
 
 type upstreamService struct {
-
 }
 
+// Upstream 上游服务
 func Upstream() *upstreamService {
 	return &upstreamService{}
 }
 
-func (service upstreamService) List() ([]entity.UpstreamEntity, error){
-	return dao.Upstream(app.Etcd()).List()
+// List 列表
+func (service upstreamService) List() ([]entity.UpstreamEntity, error) {
+	items, err := dao.Upstream(app.Etcd()).List()
+	if err != nil {
+		return nil, errors.New(enum.DataQueryFailed, err.Error())
+	}
+	return items, nil
 }
 
-func (service upstreamService) Create(req request.CreateUpstreamRequest) error  {
+// Create 创建
+func (service upstreamService) Create(req request.CreateUpstreamRequest) error {
 	item := &entity.UpstreamEntity{
 		Name:        req.Name,
 		Router:      req.Router,
@@ -49,12 +55,25 @@ func (service upstreamService) Create(req request.CreateUpstreamRequest) error  
 	return nil
 }
 
-func (service upstreamService) Update() error {
+// Update 更新
+func (service upstreamService) Update(req request.UpdateUpstreamRequest) error {
+	upstreamDao := dao.Upstream(app.Etcd())
+	item, err := upstreamDao.Get(req.Id)
+	if err != nil {
+		return errors.New(enum.DataNotFound, err.Error())
+	}
+	item.Name = req.Name
+	item.Router = req.Router
+	item.Description = req.Description
+	item.UpdateAt = date.GetTimeStamp()
+	if err := dao.Upstream(app.Etcd()).Update(item); err != nil {
+		return errors.New(enum.DataSaveFailed, err.Error())
+	}
 	return nil
 }
 
 // Delete 删除
-func (service upstreamService) Delete(id string) error  {
+func (service upstreamService) Delete(id string) error {
 	upstreamDao := dao.Upstream(app.Etcd())
 	item, err := upstreamDao.Get(id)
 	if err != nil {

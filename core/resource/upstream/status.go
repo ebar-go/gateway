@@ -8,9 +8,7 @@
 
 package upstream
 
-
-const(
+const (
 	Offline int = 0
-	Online int = 1
+	Online  int = 1
 )
-

@@ -9,7 +9,14 @@
 package request
 
 type CreateUpstreamRequest struct {
-	Name string
-	Router string
+	Name        string
+	Router      string
+	Description string
+}
+
+type UpdateUpstreamRequest struct {
+	Id          string
+	Name        string
+	Router      string
 	Description string
 }

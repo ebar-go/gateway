@@ -8,16 +8,29 @@
 
 package entity
 
+import (
+	"fmt"
+	"github.com/ebar-go/ego/utils/json"
+)
+
 type ApiEntity struct {
-	Id string
-	Method string
-	Path string
-	Key string
-	UpstreamId int
+	BaseEntity
+	Method     string
+	Path       string
+	Key        string
+	UpstreamId string
 }
 
-
-
 func (ApiEntity) TableName() string {
-	return "api"
+	return TableApi
+}
+
+func (e ApiEntity) PrimaryKey() string {
+	// upstream/{uniqueUpstreamId}/endpoint/{uniqueApiId}
+	return fmt.Sprintf("%s/%s/%s/%s", TableUpstream, e.UpstreamId, e.TableName(), e.Id)
+}
+
+func (e ApiEntity) Json() string {
+	s, _ := json.Encode(e)
+	return s
 }

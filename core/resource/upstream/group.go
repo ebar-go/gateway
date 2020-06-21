@@ -16,7 +16,7 @@ type Group struct {
 	items map[string]*Upstream
 }
 
-func NewGroup()  *Group{
+func NewGroup() *Group {
 	return &Group{items: map[string]*Upstream{}}
 }
 

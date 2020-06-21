@@ -43,7 +43,6 @@ func NewGroup() *Group {
 	}
 }
 
-
 // Get return api with method,path
 func (group *Group) Get(method, path string) *Api {
 	api := new(Api)

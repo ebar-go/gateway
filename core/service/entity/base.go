@@ -8,8 +8,10 @@
 
 package entity
 
-const(
+const (
 	TableUpstream = "upstream"
+	TableEndpoint = "endpoint"
+	TableApi      = "api"
 )
 
 type Entity interface {
@@ -19,7 +21,7 @@ type Entity interface {
 }
 
 type BaseEntity struct {
-	Id string
+	Id        string
 	CreatedAt int64
-	UpdateAt int64
+	UpdateAt  int64
 }

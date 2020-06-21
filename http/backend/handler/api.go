@@ -1,9 +1,9 @@
 /**
  * @Author: Hongker
  * @Description:
- * @File:  upstream
+ * @File:  endpoint
  * @Version: 1.0.0
- * @Date: 2020/6/17 23:32
+ * @Date: 2020/6/21 22:26
  */
 
 package handler
@@ -19,38 +19,39 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func ListUpstreamHandler(ctx *gin.Context) {
-	items, err := service.Upstream().List()
+func ListApiHandler(ctx *gin.Context) {
+	upstreamId := ctx.Query("upstream_id")
+	items, err := service.Api().List(upstreamId)
 	secure.Panic(err)
 	response.WrapContext(ctx).Success(items)
 }
 
-func CreateUpstreamHandler(ctx *gin.Context) {
-	var req request.CreateUpstreamRequest
+func CreateApiHandler(ctx *gin.Context) {
+	var req request.CreateApiRequest
 	if err := ctx.ShouldBind(&req); err != nil {
 		secure.Panic(errors.New(enum.InvalidParam, fmt.Sprintf("参数错误:%v", err)))
 	}
 
-	secure.Panic(service.Upstream().Create(req))
+	secure.Panic(service.Api().Create(req))
 	response.WrapContext(ctx).Success(nil)
 }
 
-func UpdateUpstreamHandler(ctx *gin.Context) {
-	var req request.UpdateUpstreamRequest
+func UpdateApiHandler(ctx *gin.Context) {
+	var req request.UpdateApiRequest
 	if err := ctx.ShouldBind(&req); err != nil {
 		secure.Panic(errors.New(enum.InvalidParam, fmt.Sprintf("参数错误:%v", err)))
 	}
 
-	secure.Panic(service.Upstream().Update(req))
+	secure.Panic(service.Api().Update(req))
 	response.WrapContext(ctx).Success(nil)
 }
 
-func DeleteUpstreamHandler(ctx *gin.Context) {
-	var req request.IdRequest
+func DeleteApiHandler(ctx *gin.Context) {
+	var req request.DeleteApiRequest
 	if err := ctx.ShouldBind(&req); err != nil {
 		secure.Panic(errors.New(enum.InvalidParam, fmt.Sprintf("参数错误:%v", err)))
 	}
 
-	secure.Panic(service.Upstream().Delete(req.Id))
+	secure.Panic(service.Api().Delete(req.UpstreamId, req.Id))
 	response.WrapContext(ctx).Success(nil)
 }

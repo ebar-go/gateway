@@ -22,8 +22,8 @@ type Endpoint struct {
 	weight int
 }
 
-func New(Address string, weight int) Endpoint  {
-	return Endpoint{id: strings.UUID(), address:Address, weight: weight}
+func New(Address string, weight int) Endpoint {
+	return Endpoint{id: strings.UUID(), address: Address, weight: weight}
 }
 
 // GetCompleteUrl

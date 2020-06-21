@@ -9,10 +9,10 @@
 package dao
 
 import (
+	"context"
 	"github.com/ebar-go/ego/app"
 	"github.com/ebar-go/ego/component/etcd"
 	"github.com/ebar-go/gateway/core/service/entity"
-	"context"
 )
 
 type BaseDao struct {
@@ -24,14 +24,12 @@ func (dao *BaseDao) Create(item entity.Entity) error {
 	return err
 }
 
-
 func (dao *BaseDao) Update(item entity.Entity) error {
 	_, err := app.Etcd().Api().Put(context.Background(), item.PrimaryKey(), item.Json())
 	return err
 }
 
-
 func (dao *BaseDao) Delete(item entity.Entity) error {
-	_, err := app.Etcd().Api().Delete(context.Background(), item.PrimaryKey(), item.Json())
+	_, err := app.Etcd().Api().Delete(context.Background(), item.PrimaryKey())
 	return err
 }

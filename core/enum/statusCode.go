@@ -8,15 +8,14 @@
 
 package enum
 
-const(
-	InvalidParam = 1001
-	InvalidResponse = 1002
-	DataNotFound = 1003
+const (
+	InvalidParam      = 1001
+	InvalidResponse   = 1002
+	DataNotFound      = 1003
 	SendRequestFailed = 1004
-	DataSaveFailed = 1005
-	DataQueryFailed = 1006
-	DataDeleteFailed = 1007
+	DataSaveFailed    = 1005
+	DataQueryFailed   = 1006
+	DataDeleteFailed  = 1007
 
 	UpstreamWasOffline = 2001
-
 )

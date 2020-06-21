@@ -1,9 +1,9 @@
 /**
  * @Author: Hongker
  * @Description:
- * @File:  upstream
+ * @File:  endpoint
  * @Version: 1.0.0
- * @Date: 2020/6/17 21:47
+ * @Date: 2020/6/21 21:44
  */
 
 package dao
@@ -17,31 +17,31 @@ import (
 	"go.etcd.io/etcd/clientv3"
 )
 
-type upstreamDao struct {
+type endpointDao struct {
 	BaseDao
 }
 
-func Upstream(conn *etcd.Client) *upstreamDao {
-	return &upstreamDao{
+func Endpoint(conn *etcd.Client) *endpointDao {
+	return &endpointDao{
 		BaseDao{conn: conn},
 	}
 }
 
-// List 上游数据列表
-func (dao upstreamDao) List() ([]entity.UpstreamEntity, error) {
-	resp, err := dao.conn.Api().Get(context.Background(), entity.TableUpstream, clientv3.WithPrefix())
+// List
+func (dao endpointDao) List(upstream *entity.UpstreamEntity) ([]entity.EndpointEntity, error) {
+	resp, err := dao.conn.Api().Get(context.Background(), upstream.GetEndpointPrefix(), clientv3.WithPrefix())
 	if err != nil {
 		return nil, err
 	}
 
-	var items []entity.UpstreamEntity
+	var items []entity.EndpointEntity
 	if resp == nil || resp.Kvs == nil {
 		return nil, fmt.Errorf("Data not found")
 	}
 
 	for i := range resp.Kvs {
 		if v := resp.Kvs[i].Value; v != nil {
-			var item entity.UpstreamEntity
+			var item entity.EndpointEntity
 			if err := json.Decode(v, &item); err != nil {
 				continue
 			}
@@ -52,10 +52,10 @@ func (dao upstreamDao) List() ([]entity.UpstreamEntity, error) {
 	return items, nil
 }
 
-// Get 获取上游数据
-func (dao upstreamDao) Get(id string) (*entity.UpstreamEntity, error) {
-	item := &entity.UpstreamEntity{}
+func (dao *endpointDao) Get(upstream *entity.UpstreamEntity, id string) (*entity.EndpointEntity, error) {
+	item := &entity.EndpointEntity{}
 	item.Id = id
+	item.UpstreamId = upstream.Id
 	resp, err := dao.conn.Api().Get(context.Background(), item.PrimaryKey())
 	if err != nil {
 		return nil, err

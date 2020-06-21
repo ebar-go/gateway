@@ -12,10 +12,9 @@ import (
 	"github.com/ebar-go/ego/utils/array"
 )
 
-const(
+const (
 	InvalidIndex = -1
 )
-
 
 // WeightBalance 权重轮训算法
 type WeightBalance struct {
@@ -24,9 +23,8 @@ type WeightBalance struct {
 	lastNodeIndex int // 上一次的节点
 	currentWeight int // 当前权值
 	gcd           int // 公约数
-	weights []int
+	weights       []int
 }
-
 
 // Init
 func (loader *WeightBalance) Reload(weights []int) {
@@ -34,7 +32,6 @@ func (loader *WeightBalance) Reload(weights []int) {
 	loader.lastNodeIndex = InvalidIndex
 	loader.currentWeight = 0
 	loader.count = arr.Length()
-
 
 	if loader.count > 1 {
 		// 计算最大公约数
@@ -74,7 +71,6 @@ func (loader *WeightBalance) RandomIndex() int {
 	}
 }
 
-
 func Gcd(a, b int) int {
 	if a < b {
 		a, b = b, a
@@ -82,10 +78,9 @@ func Gcd(a, b int) int {
 
 	if b == 0 {
 		return a
-	}else {
+	} else {
 		return Gcd(b, a%b)
 	}
-
 
 }
 

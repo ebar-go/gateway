@@ -9,6 +9,7 @@
 package service
 
 import (
+	"context"
 	"github.com/ebar-go/ego/app"
 	"github.com/ebar-go/ego/utils/json"
 	"github.com/ebar-go/gateway/core/dispatcher"
@@ -18,15 +19,14 @@ import (
 	"github.com/ebar-go/gateway/core/service/entity"
 	"go.etcd.io/etcd/clientv3"
 	"net/http"
-	"context"
 )
 
-var httpDispatcher  = dispatcher.NewHttpDispatcher()
-type dispatcherService struct {
+var httpDispatcher = dispatcher.NewHttpDispatcher()
 
+type dispatcherService struct {
 }
 
-func init()  {
+func init() {
 
 	apiGroup := api.NewGroup()
 	_ = apiGroup.Add(http.MethodGet, "/user", "v1.user.list")
@@ -38,8 +38,8 @@ func init()  {
 		ApiGroup: apiGroup,
 	}
 
-	nodeInstance.AddEndpoint(endpoint.New( "127.0.0.1:9001", 10))
-	nodeInstance.AddEndpoint(endpoint.New( "127.0.0.1:9002", 20))
+	nodeInstance.AddEndpoint(endpoint.New("127.0.0.1:9001", 10))
+	nodeInstance.AddEndpoint(endpoint.New("127.0.0.1:9002", 20))
 
 	httpDispatcher.UpstreamGroup().Add(nodeInstance)
 

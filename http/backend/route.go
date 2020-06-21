@@ -22,6 +22,17 @@ func LoadRoute(router *gin.Engine) {
 
 	base.GET("upstream", handler.ListUpstreamHandler)
 	base.POST("upstream", handler.CreateUpstreamHandler)
-	base.PUT("upstream", nil)
+	base.PUT("upstream", handler.UpdateUpstreamHandler)
 	base.DELETE("upstream", handler.DeleteUpstreamHandler)
+
+	base.GET("endpoint", handler.ListEndpointHandler)
+	base.POST("endpoint", handler.CreateEndpointHandler)
+	base.PUT("endpoint", handler.UpdateEndpointHandler)
+	base.DELETE("endpoint", handler.DeleteEndpointHandler)
+
+	base.GET("api", handler.ListApiHandler)
+	base.POST("api", handler.CreateApiHandler)
+	base.PUT("api", handler.UpdateApiHandler)
+	base.DELETE("api", handler.DeleteApiHandler)
+
 }

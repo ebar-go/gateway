@@ -6,7 +6,6 @@ import (
 
 type Handle interface{}
 
-
 // Api
 type Api struct {
 	// http method
@@ -18,7 +17,6 @@ type Api struct {
 	// unique key
 	Key string
 }
-
 
 // String
 func (api *Api) String() string {

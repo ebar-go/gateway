@@ -15,11 +15,10 @@ import (
 
 type UpstreamEntity struct {
 	BaseEntity
-	Name string
-	Router string
-	Status int
+	Name        string
+	Router      string
+	Status      int
 	Description string
-
 }
 
 func (UpstreamEntity) TableName() string {
@@ -33,4 +32,14 @@ func (e UpstreamEntity) PrimaryKey() string {
 func (e UpstreamEntity) Json() string {
 	s, _ := json.Encode(e)
 	return s
+}
+
+// GetEndpointPrefix
+func (e UpstreamEntity) GetEndpointPrefix() string {
+	return fmt.Sprintf("%s/%s/%s", e.TableName(), e.Id, TableEndpoint)
+}
+
+// GetApiPrefix
+func (e UpstreamEntity) GetApiPrefix() string {
+	return fmt.Sprintf("%s/%s/%s", e.TableName(), e.Id, TableApi)
 }
