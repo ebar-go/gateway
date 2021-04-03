@@ -11,3 +11,14 @@ go http gateway
 接收应用层的API请求，并将请求转发到上游服务。
 ### Upstream Service 上游服务
 上游服务包含服务名称，路由组信息，服务地址及权重等信息。
+
+## 运行
+```
+cd gateway
+GOOS=linux CGO_ENABLED=0 go build -ldflags="-s -w" -installsuffix cgo -o app cmd/http/main.go
+./app
+```
+
+## 配置
+- 添加upstream
+- 添加endpoint
