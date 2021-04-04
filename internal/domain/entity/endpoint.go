@@ -14,9 +14,9 @@ import(
 
 type EndpointEntity struct {
 	BaseEntity
-	Address    string `json:"address"`
-	Weight     int `json:"weight"`
-	UpstreamId string `json:"upstream_id"`
+	Address    string `gorm:"not null;type:varchar(50);default:''" json:"address"`
+	Weight     int `gorm:"not null;type:int(10);default:0" json:"weight"`
+	UpstreamId string `gorm:"index;not null;type:int(10);default:0" json:"upstream_id"`
 }
 
 func (EndpointEntity) TableName() string {

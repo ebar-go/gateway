@@ -15,7 +15,7 @@ const (
 )
 
 type BaseEntity struct {
-	Id        int `gorm:"primary_key;autoIncrement;column:id" json:"id"`
-	CreatedAt int64 `gorm:"autoUpdateTime;not null" json:"created_at"`
-	UpdateAt  int64 `gorm:"autoCreateTime" json:"update_at"`
+	Id        int `gorm:"primary_key;column:id;type:int(10) auto_increment" json:"id"`
+	CreatedAt int64 `gorm:"autoUpdateTime;not null;type:int(10);default:0" json:"created_at"`
+	UpdateAt  int64 `gorm:"autoCreateTime;not null;type:int(10);default:0" json:"update_at"`
 }

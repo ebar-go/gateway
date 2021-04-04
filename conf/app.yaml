@@ -2,7 +2,7 @@ server:
   name: gateway
 
 http:
-  port: 8080
+  port: 8085
 
-db:
+mysql:
   dsn: root:123456@tcp(127.0.0.1:3306)/gateway?charset=utf8mb4&parseTime=True&loc=Local

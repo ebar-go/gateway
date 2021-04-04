@@ -13,10 +13,10 @@ import (
 
 type UpstreamEntity struct {
 	BaseEntity
-	Name        string `json:"name"`
-	Router      string `json:"router"`
-	Status      int `json:"status"`
-	Description string `json:"description"`
+	Name        string `gorm:"not null;type:varchar(50);default:''" json:"name"`
+	Router      string `gorm:"not null;type:varchar(30);default:''" json:"router"`
+	Status      int `gorm:"not null;type:tinyint(1);default:1" json:"status"`
+	Description string `gorm:"not null;type:varchar(255);default:''" json:"description"`
 }
 
 func (UpstreamEntity) TableName() string {
