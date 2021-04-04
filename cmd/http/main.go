@@ -10,6 +10,7 @@ package main
 
 import (
 	"github.com/ebar-go/ego"
+	"github.com/ebar-go/ego/component/mysql"
 	"github.com/ebar-go/gateway/cmd/http/route"
 	handlerImpl "github.com/ebar-go/gateway/cmd/http/handler/impl"
 	repositoryImpl "github.com/ebar-go/gateway/internal/domain/repository/impl"
@@ -26,6 +27,9 @@ func main() {
 	repositoryImpl.Inject(app.Container())
 	serviceImpl.Inject(app.Container())
 	handlerImpl.Inject(app.Container())
+
+	_ = app.Container().Invoke(AutoMigrate)
+
 	if err := app.LoadRouter(route.Loader); err != nil {
 		log.Fatalf("load router failed: %v\n", err)
 	}
@@ -33,4 +37,8 @@ func main() {
 	app.ServeHTTP()
 
 	app.Run()
+}
+
+func AutoMigrate(db mysql.Database)  {
+	db.GetInstance().Set("gorm:table_options", "ENGINE=InnoDB")
 }

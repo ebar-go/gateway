@@ -3,3 +3,6 @@ server:
 
 http:
   port: 8080
+
+db:
+  dsn: root:123456@tcp(127.0.0.1:3306)/gateway?charset=utf8mb4&parseTime=True&loc=Local
